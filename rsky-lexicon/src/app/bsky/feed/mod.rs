@@ -19,6 +19,7 @@ pub struct Post {
     /// The primary post content. Might be an empty string, if there are embeds.
     pub text: String,
     /// DEPRECATED: replaced by app.bsky.richtext.facet.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub entities: Option<Vec<EntityRef>>,
     /// Annotations of text (mentions, URLs, hashtags, .etc)
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -53,12 +54,20 @@ pub struct PostView {
     pub cid: String,
     pub author: ProfileViewBasic,
     pub record: Value,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub embed: Option<EmbedViews>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_count: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub repost_count: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub like_count: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quote_count: Option<usize>,
     pub indexed_at: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub viewer: Option<ViewerState>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<Label>>,
 }
 
@@ -73,14 +82,18 @@ pub struct ReasonRepost {
 #[serde(rename_all = "camelCase")]
 pub struct FeedViewPost {
     pub post: PostView,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reply: Option<ReplyRefView>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<ReasonRepost>,
     /// Context provided by feed generator that may be passed back alongside interactions.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub feed_context: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 pub struct AuthorFeed {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cursor: Option<String>,
     pub feed: Vec<FeedViewPost>,
 }
@@ -107,6 +120,7 @@ pub struct ReplyRefView {
     pub root: ReplyRefUnion,
     pub parent: ReplyRefUnion,
     /// When parent is a reply to another post, this is the author of that post.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub grandparent_author: Option<ProfileViewBasic>,
 }
 
@@ -157,22 +171,29 @@ pub struct TextSlice {
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 pub struct GetLikes {
     pub uri: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cid: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cursor: Option<String>,
 }
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 pub struct GetLikesOutput {
     pub uri: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cid: Option<String>,
     pub likes: Vec<GetLikesLike>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cursor: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 pub struct ThreadViewPost {
     pub post: PostView,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent: Option<Box<ThreadViewPostEnum>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub replies: Option<Vec<Box<ThreadViewPostEnum>>>,
 }
 
@@ -193,6 +214,7 @@ pub struct BlockedPost {
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 pub struct BlockedAuthor {
     pub did: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub viewer: Option<ViewerState>,
 }
 
@@ -206,12 +228,19 @@ pub struct GeneratorView {
     pub did: String,
     pub creator: ProfileView,
     pub display_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description_facets: Option<Vec<Facet>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub like_count: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accepts_interactions: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<Label>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub viewer: Option<GeneratorViewState>,
     pub indexed_at: String,
 }
@@ -236,6 +265,7 @@ pub enum ThreadViewPostEnum {
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 pub struct GetPostThread {
     pub uri: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub depth: Option<usize>,
 }
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]

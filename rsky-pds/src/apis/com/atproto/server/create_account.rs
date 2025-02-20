@@ -229,7 +229,7 @@ pub async fn validate_inputs_for_local_pds(
     if cfg.invites.required && input.invite_code.is_none() {
         return Err(ApiError::InvalidInviteCode);
     } else {
-        invite_code = input.invite_code.clone();
+        invite_code = input.invite_code.clone().filter(|code| code.len() != 0);
     }
 
     //Email Validation
@@ -341,8 +341,8 @@ async fn format_did_and_plc_op(
         signing_key: encode_did_key(&signing_key.public_key()),
         handle: input.handle,
         pds: format!(
-            "https://{}",
-            env::var("PDS_HOSTNAME").unwrap_or("localhost".to_owned())
+            "http://127.0.0.1:2583",
+            // env::var("PDS_HOSTNAME").unwrap_or("localhost".to_owned())
         ),
         rotation_keys,
     };

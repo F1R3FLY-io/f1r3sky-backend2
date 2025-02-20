@@ -59,7 +59,7 @@ impl<'r, T: Serialize> Responder<'r, 'static> for ReadAfterWriteResponse<T> {
                 let mut builder = Response::build();
                 let encoding = handler_response.encoding.clone();
                 let headers = handler_response.headers.clone();
-                let bytes = serde_json::to_vec(&handler_response).unwrap();
+                let bytes = serde_json::to_vec(&handler_response.body).unwrap();
                 builder.sized_body(bytes.len(), Cursor::new(bytes));
                 builder
                     .status(Status::Ok)

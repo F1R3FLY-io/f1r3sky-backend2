@@ -18,14 +18,21 @@ pub struct PutPreferencesInput {
 #[serde(rename = "app.bsky.actor.profile")]
 #[serde(rename_all = "camelCase")]
 pub struct Profile {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// Small image to be displayed next to posts from account. AKA, 'profile picture'
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar: Option<Blob>,
     /// Larger horizontal image to display behind profile view.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub banner: Option<Blob>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<ProfileLabels>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub joined_via_starter_pack: Option<StrongRef>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<DateTime<Utc>>,
 }
 
@@ -41,11 +48,17 @@ pub enum ProfileLabels {
 pub struct ProfileViewBasic {
     pub did: String,
     pub handle: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub associated: Option<RefProfileAssociated>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub viewer: Option<ViewerState>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<Label>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
 }
 
@@ -54,10 +67,14 @@ pub struct ProfileViewBasic {
 pub struct ProfileView {
     pub did: String,
     pub handle: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar: Option<String>,
     pub labels: Vec<Label>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub indexed_at: Option<String>,
 }
 
@@ -66,18 +83,30 @@ pub struct ProfileView {
 pub struct ProfileViewDetailed {
     pub did: String,
     pub handle: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub avatar: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub banner: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub followers_count: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub follows_count: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub posts_count: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub associated: Option<RefProfileAssociated>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub joined_via_starter_pack: Option<StarterPackViewBasic>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub viewer: Option<ViewerState>,
     pub labels: Vec<Label>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub indexed_at: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
 }
 
@@ -90,16 +119,22 @@ pub struct GetProfilesOutput {
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RefProfileAssociated {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub lists: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub feedgens: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub starter_packs: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub labeler: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub chat: Option<RefProfileAssociatedChat>,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RefProfileAssociatedChat {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_incoming: Option<AssociatedChatAllowIncoming>,
 }
 
@@ -116,12 +151,19 @@ pub enum AssociatedChatAllowIncoming {
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ViewerState {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub muted: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub muted_by_list: Option<ListViewBasic>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub blocked_by: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub blocking_by_list: Option<ListViewBasic>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub following: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub followed_by: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub known_followers: Option<KnownFollowers>,
 }
 
@@ -226,6 +268,7 @@ pub struct SavedFeedsPrefV2 {
 pub struct SavedFeedsPref {
     pub pinned: Vec<String>,
     pub saved: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub timeline_index: Option<i64>,
 }
 
@@ -241,14 +284,19 @@ pub struct FeedViewPref {
     // The URI of the feed, or an identifier which describes the feed.
     pub feed: String,
     // Hide replies in the feed.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hide_replies: Option<bool>,
     // Hide replies in the feed if they are not by followed users.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hide_replies_by_unfollowed: Option<bool>,
     // Hide replies in the feed if they do not have this number of likes.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hide_replies_by_like_count: Option<i64>,
     // Hide reposts in the feed.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hide_reposts: Option<bool>,
     // Hide quote posts in the feed.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hide_quote_posts: Option<bool>,
 }
 
@@ -256,8 +304,10 @@ pub struct FeedViewPref {
 #[serde(rename_all = "camelCase")]
 pub struct ThreadViewPref {
     // Sorting mode for threads.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort: Option<ThreadViewSort>,
     // Show followed users at the top of all replies.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub prioritize_followed_users: Option<bool>,
 }
 
@@ -315,9 +365,11 @@ pub struct AdultContentPref {
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BskyAppStatePref {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub active_progress_guide: Option<BskyAppProgressGuide>,
     // An array of tokens which identify nudges (modals, popups, tours, highlight dots)
     // that should be shown to the user.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub queued_nudges: Option<Vec<String>>,
 }
 
