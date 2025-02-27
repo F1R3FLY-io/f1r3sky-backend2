@@ -1,0 +1,44 @@
+services:
+  postgresql:
+    image: postgres:17-bookworm
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    command: postgres -c log_statement=all
+    tmpfs:
+      - /var/lib/postgresql/data
+
+  minio:
+    image: minio/minio
+    ports:
+      - 9000:9000
+      - 9001:9001
+    tmpfs:
+      - /data
+    command: server /data --console-address ":9001"
+
+  firefly:
+    build:
+      context: .
+      dockerfile: firefly.dockerfile
+    ports:
+      - 40401:40401
+      - 40402:40402
+    env_file:
+      - ../docker/.env
+    command: run -s --no-upnp --allow-private-addresses --synchrony-constraint-threshold=0.0 --validator-private-key ${VALIDATOR_PRIVATE_KEY}
+
+  sync:
+    build:
+      context: ../firefly
+      dockerfile: ../docker/sync.dockerfile
+      args:
+        POSTGRESQL_VERSION: 17
+    depends_on:
+      firefly:
+        condition: service_healthy
+    env_file:
+      - ../docker/.env
+    entrypoint: /bin/bash
+    command: -c "/app/firefly --wallet-key=${WALLET_KEY} --deploy-service-url=http://firefly:40401 --propose-service-url=http://firefly:40402 --service-id=docker-pds init-contract; while true; do /app/firefly --wallet-key=${WALLET_KEY} --deploy-service-url=http://firefly:40401 --propose-service-url=http://firefly:40402 --service-id=docker-pds upload --db-url=postgresql://postgres@postgresql:5432; echo SYNCED; sleep 300; done"

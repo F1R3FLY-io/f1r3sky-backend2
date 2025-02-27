@@ -4,6 +4,7 @@ use atrium_api::client::AtpServiceClient;
 use atrium_xrpc_client::reqwest::ReqwestClientBuilder;
 use diesel::prelude::*;
 use diesel::sql_types::Int4;
+use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use dotenvy::dotenv;
 use rocket::data::{Limits, ToByteUnit};
 use rocket::fairing::{Fairing, Info, Kind};
@@ -13,7 +14,6 @@ use rocket::figment::{
 };
 use rocket::http::Header;
 use rocket::http::Status;
-use rocket::request::local_cache;
 use rocket::response::status;
 use rocket::serde::json::Json;
 use rocket::shield::{NoSniff, Shield};
@@ -25,6 +25,7 @@ use rsky_pds::account_manager::AccountManager;
 use rsky_pds::apis::*;
 use rsky_pds::config::env_to_cfg;
 use rsky_pds::crawlers::Crawlers;
+use rsky_pds::db::establish_connection;
 use rsky_pds::db::DbConn;
 use rsky_pds::read_after_write::viewer::{LocalViewer, LocalViewerCreatorParams};
 use rsky_pds::sequencer::Sequencer;
@@ -34,6 +35,8 @@ use rsky_pds::{
 };
 use std::env;
 use tokio::sync::RwLock;
+
+pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!("./migrations");
 
 pub struct CORS;
 
@@ -143,6 +146,9 @@ async fn rocket() -> _ {
 
     let subscriber = tracing_subscriber::FmtSubscriber::new();
     tracing::subscriber::set_global_default(subscriber).unwrap();
+
+    let conn = &mut establish_connection().unwrap();
+    conn.run_pending_migrations(MIGRATIONS).unwrap();
 
     let db_url = env::var("DATABASE_URL").unwrap_or("".into());
 

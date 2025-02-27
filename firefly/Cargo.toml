@@ -1,0 +1,20 @@
+[package]
+edition = "2021"
+name    = "firefly"
+publish = false
+version = "0.1.0"
+
+[dependencies]
+anyhow    = { version = "1.0" }
+blake2    = { version = "0.10" }
+clap      = { version = "4.5", features = ["derive"] }
+hex       = { version = "0.4" }
+prost     = { version = "0.13" }
+reqwest   = { version = "0.12" }
+secp256k1 = { version = "0.30" }
+tokio     = { version = "1.43", features = ["macros", "rt-multi-thread"] }
+tonic     = { version = "0.12" }
+uuid      = { version = "1.13", features = ["v4"] }
+
+[build-dependencies]
+tonic-build = { version = "0.12" }

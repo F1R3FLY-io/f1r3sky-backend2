@@ -286,6 +286,7 @@ impl LocalViewer {
                     reply_count: Some(0), // counts presumed to be 0 directly after post creation
                     repost_count: Some(0),
                     like_count: Some(0),
+                    quote_count: Some(0),
                     indexed_at,
                     viewer: None,
                     labels: None,

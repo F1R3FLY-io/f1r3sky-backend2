@@ -68,7 +68,7 @@ pub fn gen_invite_codes(count: i32) -> Vec<String> {
 }
 
 pub fn validate_handle(handle: &str) -> bool {
-    let suffix: String = env::var("PDS_HOSTNAME").unwrap_or("localhost".to_owned());
+    let suffix: String = env::var("PDS_HOSTNAME").unwrap_or("test".to_owned());
     let s_slice: &str = &suffix[..]; // take a full slice of the string
     handle.ends_with(s_slice)
     // Need to check suffix here and need to make sure handle doesn't include "." after trumming it
